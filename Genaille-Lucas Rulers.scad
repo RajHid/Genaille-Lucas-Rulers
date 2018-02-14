@@ -85,6 +85,9 @@ module BODY_NUM(){
     color("Gold", 1.0){
         difference(){
             cube([Body_Length,Width/Body_Split_Ratio,10]);
+            rotate([0,0,90]){
+                TESTING();
+            }
         }
     }
 }
@@ -93,6 +96,7 @@ module BODY_TRIA(){
     color("Khaki", 1.0){
         difference(){
             cube([Body_Length,Width/Body_Split_Ratio*3,10]);
+         
         }
     }
 }
@@ -123,10 +127,12 @@ module TESTING(){
     translate([0,0,10]){
         Stepp=Lttr_Siz*2;
         for(i=[1:9]){
-            translate([0,-Stepp*(i-1),i*3]){
+            translate([0,-Stepp*(i-1),0]){
                 echo("Stepp_0", Stepp);
-                Stenc_Head_Text(i);
-                Stenc_Body_Num(i,Whd);
+                union(){
+                    Stenc_Head_Text(i);
+                    #Stenc_Body_Num(i,Whd);
+                }
             }
             Stepp=Stepp*i/2;
                 echo("Stepp_1", Stepp);
@@ -141,14 +147,13 @@ module Stenc_Head_Text(END){
     
     color("PaleVioletRed", 1.0){
         for(i=[1:END]){
-            translate([0,-i*Lttr_Siz*2+Lttr_Siz,0]){
-            text(str(i), 
-            font =FONT, // Liberation Sans 
-            size = Lttr_Siz ,
-            halign="center",
-            valign="center");
-            translate([0,-5,0]){
-            //    cube([10,10,10]); Testing the units for Font dimensions
+            translate([Width/(Body_Split_Ratio*2),-i*Lttr_Siz*2+Lttr_Siz,0]){
+            linear_extrude(height = 0.5, center = true, convexity = 10, twist = -fanrot, slices = 20, scale = 1.0) {
+                text(str(i), 
+                font =FONT, // Liberation Sans 
+                size = Lttr_Siz ,
+                halign="center",
+                valign="center");
                 }
             }
         }
