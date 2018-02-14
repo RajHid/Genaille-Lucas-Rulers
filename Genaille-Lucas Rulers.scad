@@ -85,8 +85,10 @@ module BODY_NUM(){
     color("Gold", 1.0){
         difference(){
             cube([Body_Length,Width/Body_Split_Ratio,10]);
-            rotate([0,0,90]){
-                TESTING();
+            translate([0,-Width/Body_Split_Ratio,0]){
+                rotate([0,0,90]){
+                    TESTING();
+                }
             }
         }
     }
@@ -112,13 +114,17 @@ module FOOT(){
 // Stencils ------------------------------
 Stenc_Heigth=Heigth/6;
 // -- Head ------------------------------
-
 module Stenc_Head(){
     color("Pink", 1.0){
         }
     }
 // ---- Text ------------------------------
+//==== Text ====================
+// == Stenc_Head ====================
 
+
+// -- Stencil_Body ------------------------------
+// ---- Stenceil_Text ------------------------------
 TESTING();
 module TESTING(){
     //Len=1;
@@ -127,17 +133,21 @@ module TESTING(){
     translate([0,0,10]){
         Stepp=Lttr_Siz*2;
         for(i=[1:9]){
-            translate([0,-Stepp*(i-1),0]){
+            translate([(Width-Width/Body_Split_Ratio)/2,-Stepp*(i-1),i]){
                 echo("Stepp_0", Stepp);
                 union(){
-                    Stenc_Head_Text(i);
-                    #Stenc_Body_Num(i,Whd);
+                    #Stenc_Head_Text(i);
+                    Stenc_Body_Num(i,Whd);
                 }
+                translate([-Width/Body_Split_Ratio/2,0,0]){
+                    #Stenc_Body_Tri(i);
+                }// Translate is for Testing
             }
             Stepp=Stepp*i/2;
                 echo("Stepp_1", Stepp);
         }
     }
+    
     } // Just for easy dirty Testing
 
 
@@ -147,8 +157,8 @@ module Stenc_Head_Text(END){
     
     color("PaleVioletRed", 1.0){
         for(i=[1:END]){
-            translate([Width/(Body_Split_Ratio*2),-i*Lttr_Siz*2+Lttr_Siz,0]){
-            linear_extrude(height = 0.5, center = true, convexity = 10, twist = -fanrot, slices = 20, scale = 1.0) {
+            translate([0,-i*Lttr_Siz*2+Lttr_Siz,0]){
+            linear_extrude(height = 0.5, center = true, convexity = 10, twist = 0, slices = 20, scale = 1.0) {
                 text(str(i), 
                 font =FONT, // Liberation Sans 
                 size = Lttr_Siz ,
@@ -159,23 +169,47 @@ module Stenc_Head_Text(END){
         }
     }
 }
-// == Head ====================
 
-// -- Body ------------------------------
 
 module Stenc_Body_Num(Len,Whd){
     DIM=Lttr_Siz*2;
     //Whd;
-    for(i=[1:Len]){
-        translate([0,-DIM*i,0]){
-        cube([Width/Body_Split_Ratio,DIM,Stenc_Heigth]);
+    translate([0,-DIM*Len,0]){
+        cube([Width/Body_Split_Ratio,DIM*Len,Stenc_Heigth]);
         }
     }
+//==== Stencil_Text ====================
+
+
+// ---- Stencil_Tria  ------------------------------
+
+
+module Stenc_Body_Tri(Len){
+    DIM=Lttr_Siz*2;
+    
+    x=1;
+    y=1;
+    //Whd;
+    translate([0,-DIM*Len,0]){
+        //cube([Width/Body_Split_Ratio,DIM*Len,Stenc_Heigth]);
+        Triangle(DIM*Len);
+        }
+}
+module Triangle(Basis){
+    Zeiger_1=Basis/2;
+    Zeiger_2=3;
+    translate([0,0,Stenc_Heigth/2]){
+        rotate([0,0,90]){
+                linear_extrude(height = Stenc_Heigth, center = true, convexity = 10, twist = 0, slices = 20, scale = 1.0) {
+                polygon([[0,0],[Zeiger_1,Width-Width/Body_Split_Ratio],[Basis,0]]);
+            } // Is a 2D-Objekt?
+        }
     }
+}
 
-// ---- Text ------------------------------
+// ==== Stencil_Tria ====================
+// == Stencil_Body ====================
 
-// == Body ====================
 
 // -- Foot ------------------------------
 
