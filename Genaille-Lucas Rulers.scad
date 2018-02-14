@@ -13,7 +13,7 @@ NUMSYS=10; // Numeral System Dec, HEX, Octal
 ANZ_NSy=NUMSYS-1; // Number of Fields of Body, Dec> 9=10-1
 
 // -- text relatet ----------
-Lttr_Siz=10; // Basic Height of all Text
+Lttr_Siz=3; // Basic Height of all Text
 Head_Text_HP=3; // Teterms the heigh of The Head of the Rulers
 BASE=ANZ_NSy*2; // determines The length of the Field
 FONT="Linux Libertine Mono O:style=Mono";
@@ -117,9 +117,9 @@ module Stenc_Head(){
 
 TESTING();
 module TESTING(){
-    Len=1;
+    //Len=1;
     Whd=Width/Body_Split_Ratio;
-    hilf=1;
+    //hilf=1;
     translate([0,0,10]){
         Stepp=Lttr_Siz*2;
         for(i=[1:9]){
@@ -141,7 +141,7 @@ module Stenc_Head_Text(END){
     
     color("PaleVioletRed", 1.0){
         for(i=[1:END]){
-            translate([0,-i*Lttr_Siz*2,0]){
+            translate([0,-i*Lttr_Siz*2+Lttr_Siz,0]){
             text(str(i), 
             font =FONT, // Liberation Sans 
             size = Lttr_Siz ,
@@ -162,7 +162,7 @@ module Stenc_Body_Num(Len,Whd){
     DIM=Lttr_Siz*2;
     //Whd;
     for(i=[1:Len]){
-        translate([0,-DIM*i-DIM/2,0]){
+        translate([0,-DIM*i,0]){
         cube([Width/Body_Split_Ratio,DIM,Stenc_Heigth]);
         }
     }
