@@ -13,10 +13,10 @@ NUMSYS=10; // Numeral System Dec, HEX, Octal
 ANZ_NSy=NUMSYS-1; // Number of Fields of Body, Dec> 9=10-1
 
 // -- text relatet ----------
-Lttr_Siz=4; // Basic Height of all Text
+Lttr_Siz=10; // Basic Height of all Text
 Head_Text_HP=3; // Teterms the heigh of The Head of the Rulers
 BASE=ANZ_NSy*2; // determines The length of the Field
-
+FONT="Linux Libertine Mono O:style=Mono";
 
 // Basic Sizeparameters ====================
 
@@ -117,11 +117,22 @@ module Stenc_Head(){
 
 TESTING();
 module TESTING(){
+    Len=1;
+    Whd=Width/Body_Split_Ratio;
+    hilf=1;
     translate([0,0,10]){
-        Stenc_Head_Text(9);
-        Stenc_Body_Num();
+        Stepp=Lttr_Siz*2;
+        for(i=[1:9]){
+            translate([0,-Stepp*(i-1),i*3]){
+                echo("Stepp_0", Stepp);
+                Stenc_Head_Text(i);
+                Stenc_Body_Num(i,Whd);
+            }
+            Stepp=Stepp*i/2;
+                echo("Stepp_1", Stepp);
+        }
     }
-    } // Just for Easy dirty Testing
+    } // Just for easy dirty Testing
 
 
 module Stenc_Head_Text(END){
@@ -130,12 +141,16 @@ module Stenc_Head_Text(END){
     
     color("PaleVioletRed", 1.0){
         for(i=[1:END]){
-            translate([0,-i*Lttr_Siz*2,0])
+            translate([0,-i*Lttr_Siz*2,0]){
             text(str(i), 
-            font ="Liberation Sans" , 
+            font =FONT, // Liberation Sans 
             size = Lttr_Siz ,
             halign="center",
             valign="center");
+            translate([0,-5,0]){
+            //    cube([10,10,10]); Testing the units for Font dimensions
+                }
+            }
         }
     }
 }
@@ -143,11 +158,14 @@ module Stenc_Head_Text(END){
 
 // -- Body ------------------------------
 
-module Stenc_Body_Num(){
-    cube([Width/Body_Split_Ratio,Width/Body_Split_Ratio,Stenc_Heigth]){
-        
+module Stenc_Body_Num(Len,Whd){
+    DIM=Lttr_Siz*2;
+    //Whd;
+    for(i=[1:Len]){
+        translate([0,-DIM*i-DIM/2,0]){
+        cube([Width/Body_Split_Ratio,DIM,Stenc_Heigth]);
         }
-    
+    }
     }
 
 // ---- Text ------------------------------
